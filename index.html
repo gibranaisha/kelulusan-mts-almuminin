@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Kelulusan MTs Al Mu'minin 2026</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:Segoe UI, sans-serif;
+      background:linear-gradient(135deg,#014421,#0b6b3a);
+      min-height:100vh;
+      color:white;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    .glass{
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(12px);
+      border-radius:20px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.3);
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo{
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:white;
+      padding:10px;
+      object-fit:contain;
+    }
+
+    .btn-gold{
+      background:gold;
+      color:black;
+      font-weight:bold;
+      border:none;
+    }
+
+    .btn-gold:hover{
+      background:#ffdd00;
+    }
+
+    .sidebar{
+      min-height:100vh;
+      background:#043d1f;
+      padding:20px;
+    }
+
+    .sidebar button{
+      width:100%;
+      margin-bottom:10px;
+    }
+
+    table{
+      color:white !important;
+    }
+
+    .success-box{
+      background:white;
+      color:#198754;
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+      margin-bottom:20px;
+      animation:pulse 2s infinite;
+    }
+
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.02)}
+      100%{transform:scale(1)}
+    }
+
+    .footer{
+      text-align:center;
+      margin-top:30px;
+      opacity:0.8;
+      font-size:14px;
+    }
+
+    .countdown{
+      font-size:20px;
+      font-weight:bold;
+      color:gold;
+    }
+
+    .card-stat{
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+      color:white;
+    }
+
+    .bg1{background:#198754;}
+    .bg2{background:#0d6efd;}
+    .bg3{background:#ffc107;color:black;}
+
+    @media(max-width:768px){
+      .sidebar{
+        min-height:auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="landingPage" class="container py-5">
+
+  <div class="text-center mb-5">
+
+    <img id="madrasahLogo"
+      class="logo mb-3"
+      src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg">
+
+    <h1 class="fw-bold">PENGUMUMAN KELULUSAN</h1>
+    <h2>Madrasah Tsanawiyah Al Mu'minin</h2>
+    <h4>Tahun Pelajaran 2025/2026</h4>
+
+    <div class="countdown mt-3" id="countdown"></div>
+
+  </div>
+
+  <div class="row justify-content-center">
+
+    <div class="col-md-4 mb-3">
+      <button class="btn btn-light w-100 py-3"
+        onclick="showAdminLogin()">
+        <i class="fa fa-user-shield"></i>
+        Login Admin
+      </button>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <button class="btn btn-gold w-100 py-3"
+        onclick="showStudentLogin()">
+        <i class="fa fa-user-graduate"></i>
+        Login Siswa
+      </button>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    E-Kelulusan MTs Al Mu'minin 2026
+  </div>
+
+</div>
+
+<div id="adminLogin" class="container py-5 hidden">
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="glass p-4">
+
+        <h3 class="text-center mb-4">Login Admin</h3>
+
+        <input type="text" id="adminUsername"
+          class="form-control mb-3"
+          placeholder="Username">
+
+        <input type="password" id="adminPassword"
+          class="form-control mb-3"
+          placeholder="Password">
+
+        <button class="btn btn-warning w-100"
+          onclick="loginAdmin()">
+          Login
+        </button>
+
+        <button class="btn btn-light w-100 mt-2"
+          onclick="backHome()">
+          Kembali
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div id="studentLogin" class="container py-5 hidden">
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="glass p-4">
+
+        <h3 class="text-center mb-4">Login Siswa</h3>
+
+        <input type="text"
+          id="studentNISN"
+          class="form-control mb-3"
+          placeholder="Masukkan NISN">
+
+        <button class="btn btn-warning w-100"
+          onclick="loginStudent()">
+          Lihat Kelulusan
+        </button>
+
+        <button class="btn btn-light w-100 mt-2"
+          onclick="backHome()">
+          Kembali
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div id="adminDashboard" class="hidden">
+
+  <div class="row g-0">
+
+    <div class="col-md-3 sidebar">
+
+      <h3 class="mb-4">Dashboard Admin</h3>
+
+      <button class="btn btn-light"
+        onclick="showSection('dashboardSection')">
+        Dashboard
+      </button>
+
+      <button class="btn btn-light"
+        onclick="showSection('addStudentSection')">
+        Tambah Siswa
+      </button>
+
+      <button class="btn btn-light"
+        onclick="showSection('tableSection')">
+        Data Siswa
+      </button>
+
+      <button class="btn btn-light"
+        onclick="exportJSON()">
+        Backup JSON
+      </button>
+
+      <button class="btn btn-light"
+        onclick="logoutAdmin()">
+        Logout
+      </button>
+
+    </div>
+
+    <div class="col-md-9 p-4">
+
+      <div id="dashboardSection" class="glass p-4 section">
+
+        <h2>Dashboard Statistik</h2>
+        <hr>
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <div class="card-stat bg1">
+              <h3 id="totalSiswa">0</h3>
+              <p>Total Siswa</p>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <div class="card-stat bg2">
+              <h3 id="totalLulus">0</h3>
+              <p>Siswa Lulus</p>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <div class="card-stat bg3">
+              <h3 id="totalTidakLulus">0</h3>
+              <p>Tidak Lulus</p>
+            </div>
+          </div>
+
+        </div>
+
+        <hr>
+
+        <h5>Upload Logo Madrasah</h5>
+        <input type="file" class="form-control mb-3"
+          onchange="uploadLogo(event)">
+
+        <h5>Import Excel Data Siswa</h5>
+        <input type="file" class="form-control"
+          id="excelFile">
+
+        <button class="btn btn-warning mt-2"
+          onclick="uploadExcel()">
+          Upload Excel
+        </button>
+
+      </div>
+
+      <div id="addStudentSection"
+        class="glass p-4 section hidden">
+
+        <h3>Tambah Data Siswa</h3>
+        <hr>
+
+        <input type="text"
+          id="nama"
+          class="form-control mb-2"
+          placeholder="Nama Siswa">
+
+        <input type="text"
+          id="nisn"
+          class="form-control mb-2"
+          placeholder="NISN">
+
+        <input type="text"
+          id="kelas"
+          class="form-control mb-2"
+          placeholder="Kelas">
+
+        <select id="status"
+          class="form-control mb-2">
+          <option>LULUS</option>
+          <option>TIDAK LULUS</option>
+        </select>
+
+        <textarea id="nilai"
+          class="form-control mb-2"
+          rows="7"
+          placeholder="Contoh:
+Bahasa Indonesia:90
+Matematika:88
+IPA:89
+IPS:90"></textarea>
+
+        <button class="btn btn-warning"
+          onclick="saveStudent()">
+          Simpan Data
+        </button>
+
+      </div>
+
+      <div id="tableSection"
+        class="glass p-4 section hidden">
+
+        <h3>Data Siswa</h3>
+        <hr>
+
+        <input type="text"
+          class="form-control mb-3"
+          id="searchInput"
+          placeholder="Cari Nama atau NISN"
+          onkeyup="renderTable()">
+
+        <div class="table-responsive">
+
+          <table class="table table-bordered">
+
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>NISN</th>
+                <th>Kelas</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+
+            <tbody id="tableBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div id="studentResult" class="container py-5 hidden">
+
+  <div class="glass p-4">
+
+    <div id="resultContent"></div>
+
+    <button class="btn btn-warning mt-3"
+      onclick="downloadPDF()">
+      Download PDF
+    </button>
+
+    <button class="btn btn-light mt-3"
+      onclick="backHome()">
+      Kembali
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let currentStudent = null;
+
+function hideAll(){
+  document.getElementById('landingPage').classList.add('hidden');
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('studentLogin').classList.add('hidden');
+  document.getElementById('adminDashboard').classList.add('hidden');
+  document.getElementById('studentResult').classList.add('hidden');
+}
+
+function backHome(){
+  hideAll();
+  document.getElementById('landingPage').classList.remove('hidden');
+}
+
+function showAdminLogin(){
+  hideAll();
+  document.getElementById('adminLogin').classList.remove('hidden');
+}
+
+function showStudentLogin(){
+  hideAll();
+  document.getElementById('studentLogin').classList.remove('hidden');
+}
+
+function loginAdmin(){
+
+  let u = document.getElementById('adminUsername').value;
+  let p = document.getElementById('adminPassword').value;
+
+  if(u === 'admin' && p === 'admin123'){
+
+    hideAll();
+    document.getElementById('adminDashboard').classList.remove('hidden');
+
+    updateStat();
+    renderTable();
+
+  }else{
+
+    Swal.fire({
+      icon:'error',
+      title:'Login Gagal',
+      text:'Username atau Password salah'
+    });
+  }
+}
+
+function logoutAdmin(){
+  backHome();
+}
+
+function showSection(id){
+
+  document.querySelectorAll('.section').forEach(sec=>{
+    sec.classList.add('hidden');
+  });
+
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function saveStudent(){
+
+  let nama = document.getElementById('nama').value;
+  let nisn = document.getElementById('nisn').value;
+  let kelas = document.getElementById('kelas').value;
+  let status = document.getElementById('status').value;
+  let nilai = document.getElementById('nilai').value;
+
+  if(nama === '' || nisn === ''){
+
+    Swal.fire({
+      icon:'warning',
+      title:'Lengkapi Data'
+    });
+
+    return;
+  }
+
+  students.push({
+    nama,
+    nisn,
+    kelas,
+    status,
+    nilai
+  });
+
+  localStorage.setItem('students', JSON.stringify(students));
+
+  Swal.fire({
+    icon:'success',
+    title:'Berhasil',
+    text:'Data siswa berhasil disimpan'
+  });
+
+  document.getElementById('nama').value='';
+  document.getElementById('nisn').value='';
+  document.getElementById('kelas').value='';
+  document.getElementById('nilai').value='';
+
+  updateStat();
+  renderTable();
+}
+
+function renderTable(){
+
+  let body = document.getElementById('tableBody');
+  let search = document.getElementById('searchInput').value.toLowerCase();
+
+  body.innerHTML = '';
+
+  students.forEach((s,index)=>{
+
+    if(
+      s.nama.toLowerCase().includes(search) ||
+      s.nisn.toLowerCase().includes(search)
+    ){
+
+      body.innerHTML += `
+      <tr>
+        <td>${s.nama}</td>
+        <td>${s.nisn}</td>
+        <td>${s.kelas}</td>
+        <td>${s.status}</td>
+        <td>
+
+          <button class="btn btn-danger btn-sm"
+            onclick="deleteStudent(${index})">
+            Hapus
+          </button>
+
+        </td>
+      </tr>
+      `;
+    }
+  });
+}
+
+function deleteStudent(index){
+
+  Swal.fire({
+    title:'Hapus Data?',
+    icon:'warning',
+    showCancelButton:true
+  }).then((result)=>{
+
+    if(result.isConfirmed){
+
+      students.splice(index,1);
+
+      localStorage.setItem(
+        'students',
+        JSON.stringify(students)
+      );
+
+      renderTable();
+      updateStat();
+    }
+  });
+}
+
+function updateStat(){
+
+  document.getElementById('totalSiswa').innerText = students.length;
+
+  let lulus = students.filter(s=>s.status==='LULUS').length;
+
+  let tidak = students.filter(s=>s.status==='TIDAK LULUS').length;
+
+  document.getElementById('totalLulus').innerText = lulus;
+  document.getElementById('totalTidakLulus').innerText = tidak;
+}
+
+function loginStudent(){
+
+  let nisn = document.getElementById('studentNISN').value;
+
+  let found = students.find(s=>s.nisn===nisn);
+
+  if(!found){
+
+    Swal.fire({
+      icon:'error',
+      title:'Data Tidak Ditemukan',
+      text:'NISN belum terdaftar'
+    });
+
+    return;
+  }
+
+  currentStudent = found;
+
+  showStudentResult(found);
+}
+
+function showStudentResult(data){
+
+  hideAll();
+
+  document.getElementById('studentResult').classList.remove('hidden');
+
+  let nilaiHTML = '';
+
+  let arr = data.nilai.split('\n');
+
+  arr.forEach(n=>{
+
+    let x = n.split(':');
+
+    if(x[0]){
+
+      nilaiHTML += `
+      <tr>
+        <td>${x[0]}</td>
+        <td>${x[1] || ''}</td>
+      </tr>
+      `;
+    }
+  });
+
+  document.getElementById('resultContent').innerHTML = `
+
+    <div class="success-box">
+
+      <h1>
+        ${data.status==='LULUS'
+          ? 'SELAMAT ANDA DINYATAKAN LULUS'
+          : 'TETAP SEMANGAT DAN TERUS BELAJAR'}
+      </h1>
+
+    </div>
+
+    <h4>Identitas Siswa</h4>
+    <hr>
+
+    <p><b>Nama :</b> ${data.nama}</p>
+    <p><b>NISN :</b> ${data.nisn}</p>
+    <p><b>Kelas :</b> ${data.kelas}</p>
+    <p><b>Status :</b> ${data.status}</p>
+
+    <hr>
+
+    <h4>Nilai Mata Pelajaran</h4>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+
+        <thead>
+          <tr>
+            <th>Mata Pelajaran</th>
+            <th>Nilai</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${nilaiHTML}
+        </tbody>
+
+      </table>
+    </div>
+
+    <hr>
+
+    <p>
+      Perjalanan kalian belum berakhir.
+      Kelulusan ini adalah langkah awal menuju masa depan yang lebih gemilang.
+      Teruslah belajar, berakhlak mulia, dan membawa nama baik Madrasah Tsanawiyah Al Mu'minin.
+      Semoga Allah SWT memudahkan setiap langkah kalian menuju kesuksesan dunia dan akhirat.
+    </p>
+  `;
+}
+
+function downloadPDF(){
+
+  const { jsPDF } = window.jspdf;
+
+  let doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('PENGUMUMAN KELULUSAN',20,20);
+
+  doc.setFontSize(14);
+  doc.text('Madrasah Tsanawiyah Al Mu\'minin',20,30);
+
+  doc.setFontSize(12);
+
+  doc.text('Nama : ' + currentStudent.nama,20,50);
+  doc.text('NISN : ' + currentStudent.nisn,20,60);
+  doc.text('Kelas : ' + currentStudent.kelas,20,70);
+  doc.text('Status : ' + currentStudent.status,20,80);
+
+  let y = 100;
+
+  let arr = currentStudent.nilai.split('\n');
+
+  arr.forEach(n=>{
+
+    if(n.trim() !== ''){
+      doc.text(n,20,y);
+      y += 10;
+    }
+  });
+
+  doc.save(currentStudent.nama + '.pdf');
+}
+
+function uploadExcel(){
+
+  let file = document.getElementById('excelFile').files[0];
+
+  if(!file){
+
+    Swal.fire({
+      icon:'warning',
+      title:'Pilih File Excel'
+    });
+
+    return;
+  }
+
+  let reader = new FileReader();
+
+  reader.onload = function(e){
+
+    let data = new Uint8Array(e.target.result);
+
+    let workbook = XLSX.read(data,{type:'array'});
+
+    let sheet = workbook.Sheets[
+      workbook.SheetNames[0]
+    ];
+
+    let json = XLSX.utils.sheet_to_json(sheet);
+
+    json.forEach(item=>{
+
+      students.push({
+
+        nama:item.Nama || '',
+        nisn:String(item.NISN || ''),
+        kelas:item.Kelas || '',
+        status:item.Status || 'LULUS',
+
+        nilai:`
+Bahasa Indonesia:${item['Bahasa Indonesia'] || ''}
+Matematika:${item['Matematika'] || ''}
+IPA:${item['IPA'] || ''}
+IPS:${item['IPS'] || ''}
+Bahasa Inggris:${item['Bahasa Inggris'] || ''}
+        `
+      });
+    });
+
+    localStorage.setItem(
+      'students',
+      JSON.stringify(students)
+    );
+
+    renderTable();
+    updateStat();
+
+    Swal.fire({
+      icon:'success',
+      title:'Berhasil',
+      text:'Data Excel berhasil diupload'
+    });
+  }
+
+  reader.readAsArrayBuffer(file);
+}
+
+function uploadLogo(event){
+
+  let file = event.target.files[0];
+
+  let reader = new FileReader();
+
+  reader.onload = function(e){
+
+    document.getElementById('madrasahLogo').src = e.target.result;
+
+    localStorage.setItem('logo', e.target.result);
+
+    Swal.fire({
+      icon:'success',
+      title:'Logo berhasil diubah'
+    });
+  }
+
+  reader.readAsDataURL(file);
+}
+
+function exportJSON(){
+
+  let dataStr =
+    'data:text/json;charset=utf-8,' +
+    encodeURIComponent(JSON.stringify(students));
+
+  let a = document.createElement('a');
+
+  a.href = dataStr;
+  a.download = 'backup_siswa.json';
+
+  a.click();
+}
+
+window.onload = function(){
+
+  let logo = localStorage.getItem('logo');
+
+  if(logo){
+    document.getElementById('madrasahLogo').src = logo;
+  }
+
+  updateStat();
+
+  let count = document.getElementById('countdown');
+
+  count.innerHTML = 'Pengumuman Dibuka: Selasa, 2 Juni 2026';
+}
+
+</script>
+
+</body>
+</html>
